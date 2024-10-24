@@ -1,0 +1,140 @@
+﻿<Window x:Class="EmployeeTimeTrackignApp.Views.EmployeeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmployeeTimeTrackignApp.Views"
+        xmlns:viewModel="clr-namespace:EmployeeTimeTrackignApp.ViewModels"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="620"
+        Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel
+        Grid.Row="0">
+            <Menu
+                x:Name="MeniItem"
+                Grid.Row="0"
+                Margin="-5,0,-7,5"
+                Width="790">
+                <MenuItem
+                    Height="60"
+                    Width="100"
+                    Name="aaa"
+                    Margin="10, 0, 5, 0"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="EnterHours"
+                    ToolTip="Enter working hours"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Enter Hours" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="70"
+                    Margin="5, 0, 5, 0"
+                    Visibility="{Binding ChangeVisibilityProjectsAdmin}"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="ProjectsAdmin"
+                    ToolTip="Manage projects"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Projects" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="90"
+                    Margin="5, 0, 5, 0"
+                    Visibility="{Binding ChangeVisibilityEmployeesAdmin}"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="EmployeesAdmin"
+                    ToolTip="Manage employees"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Employees" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="70"
+                    Margin="5, 0, 5, 0"
+                    Visibility="{Binding ChangeVisibilityProjectsManager}"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="ProjectsManager"
+                    ToolTip="Manage projects"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Projects" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="150"
+                    Margin="5, 0, 5, 0"
+                    Visibility="{Binding ChangeVisibilityHoursManagementManager}"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="HoursManagement"
+                    ToolTip="Hours management"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Hours management" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="70"
+                    Margin="5, 0, 5, 0"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="Statistics"
+                    ToolTip="EmployeeStatistics"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Statistics" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="70"
+                    Margin="5, 0, 5, 0"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="Profile"
+                    ToolTip="Profile"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Profile" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem
+                    Height="60"
+                    Width="70"
+                    Margin="5, 0, 10, 0"
+                    Command="{Binding ChangeViewCommand}"
+                    CommandParameter="LogOut"
+                    ToolTip="Log out"
+                    Cursor="Hand">
+                    <MenuItem.Header>
+                        <TextBlock Text="Log Out" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+
+        <ContentControl Grid.Row="1" Content="{Binding SelectedContent}"/>
+    </Grid>
+</Window>

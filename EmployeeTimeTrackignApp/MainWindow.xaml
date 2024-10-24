@@ -1,0 +1,84 @@
+﻿<Window x:Class="EmployeeTimeTrackignApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmployeeTimeTrackignApp"
+        xmlns:viewModel="clr-namespace:EmployeeTimeTrackignApp.ViewModels"
+        mc:Ignorable="d"
+        Title="Login" Height="300" Width="350" WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <TextBlock
+                Text="Application login"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontSize="30"
+                FontWeight="Bold"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                Text="Username:"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"/>
+            <TextBox
+                Grid.Column="1"
+                x:Name="UsernameTextBox"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0, 0, 0, 0"
+                Height="40"
+                Width="140"
+                Text="{Binding Username,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Column="0"
+                Text="Password:"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"/>
+            <PasswordBox
+                Grid.Column="1"
+                x:Name="PasswordPasswordBox"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Margin="0, 0, 0, 0"
+                Height="40"
+                Width="140"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Button
+                Content="Login"
+                Command="{Binding LoginCommand}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Height="40"
+                Width="100"
+                CommandParameter="{Binding ElementName=PasswordPasswordBox}"/>
+        </Grid>
+    </Grid>
+</Window>
