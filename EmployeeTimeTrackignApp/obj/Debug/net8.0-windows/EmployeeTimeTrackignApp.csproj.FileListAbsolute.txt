@@ -37,3 +37,4 @@ C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\Empl
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\ProfileView.baml
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\EmployeesAdminView.g.cs
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\EmployeesAdminView.baml
+C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\EmployeeTimeTrackignApp.sourcelink.json

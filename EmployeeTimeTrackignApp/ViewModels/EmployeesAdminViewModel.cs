@@ -18,7 +18,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
         private static Employee Employee { get; set; }
         private readonly EmployeeService _employeeService = new EmployeeService();
         private static EmailService _emailService = new EmailService();
-        public ObservableCollection<string> EmployeesRole { get; set; }
+        public ObservableCollection<EmployeeRole> EmployeesRole { get; set; }
 
         private ObservableCollection<Employee> _allEmployees;
         public ObservableCollection<Employee> AllEmployees
@@ -119,8 +119,8 @@ namespace EmployeeTimeTrackignApp.ViewModels
         public EmployeesAdminViewModel(Employee employee)
         {
             Employee = employee;
-            //EmployeesRole = new ObservableCollection<EmployeeRole>(Enum.GetValues(typeof(EmployeeRole)).Cast<EmployeeRole>());
-            EmployeesRole = new ObservableCollection<string> { "Employee", "Manager" };
+            EmployeesRole = new ObservableCollection<EmployeeRole>(Enum.GetValues(typeof(EmployeeRole)).Cast<EmployeeRole>());
+            //EmployeesRole = new ObservableCollection<string> { "Employee", "Manager" };
             SelectedRole = EmployeesRole[0];
             IsButtonEnable = true;
             IsTextBoxReadOnly = false;
@@ -193,7 +193,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
                     Username = SelectedEmployee.Username;
                     RemainingLeaveDays = SelectedEmployee.RemainingLeaveDays.ToString();
                     Email = SelectedEmployee.Email;
-                    SelectedRole = SelectedEmployee.Role.ToString();
+                    SelectedRole = SelectedEmployee.Role;
                     IsButtonEnable = false;
                     IsTextBoxReadOnly = true;
                     IsComboBoxEnable = false;
@@ -286,6 +286,8 @@ namespace EmployeeTimeTrackignApp.ViewModels
             bool result = _employeeService.AddNewEmployee(username, password, Email, SelectedRole.ToString(), Int32.Parse(RemainingLeaveDays));
             if (result)
             {
+                MessageBox.Show("New employee added.");
+
                 Thread emailThread = new Thread(() =>
                 {
                     _emailService.SendEmail(Email, "Account created", $"Your username is: {username} and your password is: {password} . Please update your password in next 48h.");
