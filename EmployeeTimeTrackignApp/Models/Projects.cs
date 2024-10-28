@@ -58,6 +58,18 @@ namespace EmployeeTimeTrackignApp.Models
             }
         }
 
+        //Dodato zbog lakseg selektovanja u DataGridu
+        private bool _selectedCheck;
+        public bool SelectedCheck
+        {
+            get { return _selectedCheck; }
+            set
+            {
+                _selectedCheck = value;
+                OnPropertyChanged(nameof(_selectedCheck));
+            }
+        }
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

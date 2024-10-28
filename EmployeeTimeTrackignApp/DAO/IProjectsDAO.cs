@@ -9,5 +9,10 @@ namespace EmployeeTimeTrackignApp.DAO
 {
     public interface IProjectsDAO : ICRUDDao<Projects, int>
     {
+        bool AddNewProject(string name, int ownerID);
+
+        IEnumerable<Projects> FindAllForAdmin();
+
+        bool DeleteById(int projectID);
     }
 }

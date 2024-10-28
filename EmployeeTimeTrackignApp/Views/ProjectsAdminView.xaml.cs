@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EmployeeTimeTrackignApp.Models;
+using EmployeeTimeTrackignApp.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,10 @@ namespace EmployeeTimeTrackignApp.Views
     /// </summary>
     public partial class ProjectsAdminView : UserControl
     {
-        public ProjectsAdminView()
+        public ProjectsAdminView(Employee employee)
         {
             InitializeComponent();
+            DataContext = new ProjectsAdminViewModel(employee);
         }
     }
 }

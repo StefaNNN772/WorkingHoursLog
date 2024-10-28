@@ -19,6 +19,8 @@ namespace EmployeeTimeTrackignApp.DAO
 
         IEnumerable<Employee> FindAllEmployees(int adminId);
 
+        IEnumerable<Employee> FindAllManagers();
+
         bool DeleteById(int employeeID);
 
         void CheckPasswordChanged(DateTime time);

@@ -38,6 +38,11 @@ namespace EmployeeTimeTrackignApp.Services
             return employeeDAO.FindAllEmployees(adminId);
         }
 
+        public IEnumerable<Employee> FindAllManagers()
+        {
+            return employeeDAO.FindAllManagers();
+        }
+
         public bool DeleteById(int employeeID)
         {
             return employeeDAO.DeleteById(employeeID);

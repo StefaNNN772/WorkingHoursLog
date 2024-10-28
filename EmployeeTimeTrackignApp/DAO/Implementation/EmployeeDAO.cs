@@ -218,6 +218,36 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             return ret;
         }
 
+        public IEnumerable<Employee> FindAllManagers()
+        {
+            ObservableCollection<Employee> ret = new ObservableCollection<Employee>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand command = new SqlCommand("SELECT EmployeeID, Username, Email, IsActive, RemainingLeaveDays, PasswordUpdated " +
+                    "FROM Employees WHERE Role = 'Manager' AND IsActive = 1", conn);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    ret.Add(new Employee
+                    {
+                        EmployeeID = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Email = reader.GetString(2),
+                        Role = EmployeeRole.Manager,
+                        IsActive = reader.GetBoolean(3),
+                        RemainingLeaveDays = reader.GetInt32(4),
+                        PasswordUpdated = reader.GetBoolean(5)
+                    });
+                }
+
+                conn.Close();
+            }
+
+            return ret;
+        }
+
         public Employee FindById(int id)
         {
             throw new NotImplementedException();

@@ -113,7 +113,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
             else if (viewName == "ProjectsAdmin" && SelectedContent.GetType() != typeof(ProjectsAdminView))
             {
-                SelectedContent = new ProjectsAdminView();
+                SelectedContent = new ProjectsAdminView(Employee);
             }
             else if (viewName == "EmployeesAdmin" && SelectedContent.GetType() != typeof(EmployeesAdminView))
             {

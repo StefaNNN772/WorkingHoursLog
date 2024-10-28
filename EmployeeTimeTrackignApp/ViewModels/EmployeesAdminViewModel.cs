@@ -234,7 +234,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
                 }
             }
 
-            MessageBox.Show($"Deleted {sum} employee(s)\nSome employees may not have been deleted because they are project managers.");
+            MessageBox.Show($"Deleted {sum} employee(s).\nSome employees may not have been deleted because they are project managers.");
             this.AllEmployees = (ObservableCollection<Employee>)_employeeService.FindAllEmployees(Employee.EmployeeID);
         }
 
