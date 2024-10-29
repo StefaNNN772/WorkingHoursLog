@@ -1,4 +1,5 @@
-﻿using EmployeeTimeTrackignApp.Models;
+﻿using EmployeeTimeTrackignApp.Helpers;
+using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace EmployeeTimeTrackignApp.DAO
         bool DeleteById(int projectID);
 
         bool UpdateStatus(int projectID, bool status);
+
+        IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID);
     }
 }

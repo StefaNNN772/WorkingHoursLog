@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EmployeeTimeTrackignApp.Models;
+using EmployeeTimeTrackignApp.Helpers;
 
 namespace EmployeeTimeTrackignApp.Services
 {
@@ -41,6 +42,11 @@ namespace EmployeeTimeTrackignApp.Services
         public bool UpdateStatus(int projectID, bool status)
         {
             return projectsDAO.UpdateStatus(projectID, status);
+        }
+
+        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID)
+        {
+            return projectsDAO.WorkingHoursByProject(employeeID);
         }
     }
 }

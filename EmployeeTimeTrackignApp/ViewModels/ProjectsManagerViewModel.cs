@@ -1,6 +1,8 @@
 ﻿using EmployeeTimeTrackignApp.Helpers;
 using EmployeeTimeTrackignApp.Models;
 using EmployeeTimeTrackignApp.Services;
+using LiveCharts;
+using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +28,17 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
         }
 
+        public SeriesCollection ProjectHoursSeries { get; set; }
+        private ObservableCollection<ProjectsWorkingHours> _projectsWH;
+        public ObservableCollection<ProjectsWorkingHours> ProjectsWH
+        {
+            get { return _projectsWH; }
+            set
+            {
+                SetProperty(ref _projectsWH, value);
+            }
+        }
+
         private Projects _selectedProject;
         public Projects SelectedProject
         {
@@ -43,6 +56,18 @@ namespace EmployeeTimeTrackignApp.ViewModels
         {
             Employee = employee;
             this.AllProjects = (ObservableCollection<Projects>)_projectsService.FindAllForManager(Employee.EmployeeID);
+
+            this.ProjectsWH = (ObservableCollection<ProjectsWorkingHours>)_projectsService.WorkingHoursByProject(Employee.EmployeeID);
+            ProjectHoursSeries = new SeriesCollection();
+            foreach (var projectWH in ProjectsWH)
+            {
+                ProjectHoursSeries.Add(new PieSeries
+                {
+                    Title = projectWH.Name,
+                    Values = new ChartValues<double> { projectWH.WorkingHours },
+                    DataLabels = true
+                });
+            }
 
             ActivateProjectCommand = new MyICommand(OnActivateProject);
             DeactivateProjectCommand = new MyICommand(OnDeactivateProject);
