@@ -13,6 +13,10 @@ namespace EmployeeTimeTrackignApp.DAO
 
         IEnumerable<Projects> FindAllForAdmin();
 
+        IEnumerable<Projects> FindAllForManager(int managerID);
+
         bool DeleteById(int projectID);
+
+        bool UpdateStatus(int projectID, bool status);
     }
 }

@@ -149,6 +149,32 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             return projects;
         }
 
+        public IEnumerable<Projects> FindAllForManager(int managerID)
+        {
+            ObservableCollection<Projects> projects = new ObservableCollection<Projects>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SELECT ProjectID, OwnerID, Name, IsActive, CreatedAt FROM Projects WHERE OwnerID = @OwnerID", conn);
+                cmd.Parameters.AddWithValue("@OwnerID", managerID);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    projects.Add(new Projects
+                    {
+                        ProjectID = reader.GetInt32(0),
+                        OwnerID = reader.GetInt32(1),
+                        Name = reader.GetString(2),
+                        IsActive = reader.GetBoolean(3),
+                        CreatedAt = reader.GetDateTime(4)
+                    });
+                }
+
+                conn.Close();
+            }
+            return projects;
+        }
+
         public Projects FindById(int id)
         {
             throw new NotImplementedException();
@@ -157,6 +183,47 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
         public string Save(Projects entity)
         {
             throw new NotImplementedException();
+        }
+
+        public bool UpdateStatus(int projectID, bool status)
+        {
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    SqlCommand command = new SqlCommand("UPDATE Projects SET IsActive = @IsActive WHERE ProjectID = @ProjectID", conn);
+
+                    command.Parameters.AddWithValue("@IsActive", status);
+                    command.Parameters.AddWithValue("@ProjectID", projectID);
+
+                    command.Transaction = transaction;
+
+                    int rowAffected = command.ExecuteNonQuery();
+
+                    if (rowAffected > 0)
+                    {
+                        transaction.Commit();
+                        return true;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                    transaction.Rollback();
+                    return false;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }

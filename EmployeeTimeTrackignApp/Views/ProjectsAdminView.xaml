@@ -117,7 +117,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="266"/>
+                    <ColumnDefinition Width="196"/>
                 </Grid.ColumnDefinitions>
 
                 <DataGrid
@@ -165,6 +165,18 @@
                                     <TextBlock Text="{Binding Name}"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn
+                            Header="Owner ID"
+                            Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding OwnerID}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

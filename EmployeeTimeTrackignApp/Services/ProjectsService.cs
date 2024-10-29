@@ -28,9 +28,19 @@ namespace EmployeeTimeTrackignApp.Services
             return projectsDAO.FindAllForAdmin();
         }
 
+        public IEnumerable<Projects> FindAllForManager(int managerID)
+        {
+            return projectsDAO.FindAllForManager(managerID);
+        }
+
         public bool DeleteById(int projectID)
         {
             return projectsDAO.DeleteById(projectID);
+        }
+
+        public bool UpdateStatus(int projectID, bool status)
+        {
+            return projectsDAO.UpdateStatus(projectID, status);
         }
     }
 }
