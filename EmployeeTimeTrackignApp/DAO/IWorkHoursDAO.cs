@@ -1,4 +1,5 @@
-﻿using EmployeeTimeTrackignApp.Models;
+﻿using EmployeeTimeTrackignApp.Helpers;
+using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace EmployeeTimeTrackignApp.DAO
         public int AddedHoursSum(int employeeId);
 
         public bool DeleteById(int whId);
+
+        IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID);
     }
 }

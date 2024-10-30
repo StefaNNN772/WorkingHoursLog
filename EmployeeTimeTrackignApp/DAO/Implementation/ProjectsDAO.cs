@@ -225,33 +225,5 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                 }
             }
         }
-
-        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID)
-        {
-            ObservableCollection<ProjectsWorkingHours> projectsWH = new ObservableCollection<ProjectsWorkingHours>();
-            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
-            {
-                SqlCommand cmd = new SqlCommand("SELECT p.ProjectID, p.Name, SUM(wh.AddedHours) as TotalHours " +
-                    "FROM Projects p JOIN WorkHours wh ON p.ProjectID = wh.ProjectID " +
-                    "WHERE p.OwnerID = @OwnerID " +
-                    "GROUP BY p.ProjectID, p.Name", conn);
-
-                cmd.Parameters.AddWithValue("@OwnerID", employeeID);
-
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    projectsWH.Add(new ProjectsWorkingHours
-                    {
-                        ProjectID = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        WorkingHours = reader.GetInt32(2)
-                    });
-                }
-
-                conn.Close();
-            }
-            return projectsWH;
-        }
     }
 }

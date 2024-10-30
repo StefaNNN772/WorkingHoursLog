@@ -19,7 +19,5 @@ namespace EmployeeTimeTrackignApp.DAO
         bool DeleteById(int projectID);
 
         bool UpdateStatus(int projectID, bool status);
-
-        IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID);
     }
 }

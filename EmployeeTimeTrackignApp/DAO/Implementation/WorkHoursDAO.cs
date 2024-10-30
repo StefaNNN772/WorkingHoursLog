@@ -1,4 +1,5 @@
 ﻿using EmployeeTimeTrackignApp.Connections;
+using EmployeeTimeTrackignApp.Helpers;
 using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
@@ -136,6 +137,33 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
 
                 return rowAffected > 0;
             }
+        }
+
+        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID)
+        {
+            ObservableCollection<ProjectsWorkingHours> projectsWH = new ObservableCollection<ProjectsWorkingHours>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("SELECT Status, SUM(AddedHours) as TotalHours " +
+                    "FROM WorkHours " +
+                    "WHERE ProjectID = @ProjectID " +
+                    "GROUP BY Status", conn);
+
+                cmd.Parameters.AddWithValue("@ProjectID", projectID);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    projectsWH.Add(new ProjectsWorkingHours
+                    {
+                        Status = reader.GetString(0),
+                        WorkingHours = reader.GetInt32(1)
+                    });
+                }
+
+                conn.Close();
+            }
+            return projectsWH;
         }
     }
 }

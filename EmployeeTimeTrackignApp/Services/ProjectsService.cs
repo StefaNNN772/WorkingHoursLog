@@ -43,10 +43,5 @@ namespace EmployeeTimeTrackignApp.Services
         {
             return projectsDAO.UpdateStatus(projectID, status);
         }
-
-        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID)
-        {
-            return projectsDAO.WorkingHoursByProject(employeeID);
-        }
     }
 }

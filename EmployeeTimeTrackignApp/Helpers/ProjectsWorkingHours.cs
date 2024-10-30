@@ -8,8 +8,7 @@ namespace EmployeeTimeTrackignApp.Helpers
 {
     public class ProjectsWorkingHours
     {
-        public int ProjectID { get; set; }
-        public string Name { get; set; }
+        public string Status { get; set; }
         public int WorkingHours { get; set; }
     }
 }

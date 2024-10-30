@@ -1,5 +1,6 @@
 ﻿using EmployeeTimeTrackignApp.DAO;
 using EmployeeTimeTrackignApp.DAO.Implementation;
+using EmployeeTimeTrackignApp.Helpers;
 using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,11 @@ namespace EmployeeTimeTrackignApp.Services
         public bool DeleteById(int whId)
         {
             return workHoursDAO.DeleteById(whId);
+        }
+
+        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID)
+        {
+            return workHoursDAO.WorkingHoursByProject(employeeID, projectID);
         }
     }
 }

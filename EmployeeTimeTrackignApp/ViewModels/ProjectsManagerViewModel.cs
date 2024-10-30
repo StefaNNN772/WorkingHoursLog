@@ -17,6 +17,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
     {
         private static Employee Employee { get; set; }
         private readonly ProjectsService _projectsService = new ProjectsService();
+        private readonly WorkHoursService _workingHoursService = new WorkHoursService();
 
         private ObservableCollection<Projects> _allProjects;
         public ObservableCollection<Projects> AllProjects
@@ -46,6 +47,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
             set
             {
                 SetProperty(ref _selectedProject, value);
+                ShowStatistics();
             }
         }
 
@@ -57,20 +59,30 @@ namespace EmployeeTimeTrackignApp.ViewModels
             Employee = employee;
             this.AllProjects = (ObservableCollection<Projects>)_projectsService.FindAllForManager(Employee.EmployeeID);
 
-            this.ProjectsWH = (ObservableCollection<ProjectsWorkingHours>)_projectsService.WorkingHoursByProject(Employee.EmployeeID);
-            ProjectHoursSeries = new SeriesCollection();
-            foreach (var projectWH in ProjectsWH)
-            {
-                ProjectHoursSeries.Add(new PieSeries
-                {
-                    Title = projectWH.Name,
-                    Values = new ChartValues<double> { projectWH.WorkingHours },
-                    DataLabels = true
-                });
-            }
-
             ActivateProjectCommand = new MyICommand(OnActivateProject);
             DeactivateProjectCommand = new MyICommand(OnDeactivateProject);
+
+            ProjectHoursSeries = new SeriesCollection();
+        }
+
+        public void ShowStatistics()
+        {
+            if (SelectedProject != null)
+            {
+                this.ProjectsWH = (ObservableCollection<ProjectsWorkingHours>)_workingHoursService.WorkingHoursByProject(Employee.EmployeeID, SelectedProject.ProjectID);
+
+                ProjectHoursSeries.Clear();
+
+                foreach (var projectWH in ProjectsWH)
+                {
+                    ProjectHoursSeries.Add(new PieSeries
+                    {
+                        Title = projectWH.Status,
+                        Values = new ChartValues<double> { projectWH.WorkingHours },
+                        DataLabels = true
+                    });
+                }
+            }
         }
 
         public void OnActivateProject()
