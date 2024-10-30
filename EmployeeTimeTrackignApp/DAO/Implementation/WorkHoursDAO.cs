@@ -146,7 +146,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             {
                 SqlCommand cmd = new SqlCommand("SELECT Status, SUM(AddedHours) as TotalHours " +
                     "FROM WorkHours " +
-                    "WHERE ProjectID = @ProjectID " +
+                    "WHERE ProjectID = @ProjectID AND CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND CreatedAt < GETDATE() " +
                     "GROUP BY Status", conn);
 
                 cmd.Parameters.AddWithValue("@ProjectID", projectID);
