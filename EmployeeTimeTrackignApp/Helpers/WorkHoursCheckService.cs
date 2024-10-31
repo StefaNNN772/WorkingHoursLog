@@ -19,7 +19,7 @@ namespace EmployeeTimeTrackignApp.Helpers
 
         public void Start()
         {
-            _timer = new Timer(WorkHoursCheck, null, TimeSpan.FromSeconds(20), TimeSpan.FromDays(1));
+            _timer = new Timer(WorkHoursCheck, null, TimeSpan.FromSeconds(20), TimeSpan.FromHours(12));
         }
 
         private void WorkHoursCheck(object state)
@@ -53,7 +53,7 @@ namespace EmployeeTimeTrackignApp.Helpers
                 }
             }
 
-            if (DateTime.Today.DayOfWeek == DayOfWeek.Thursday)
+            if (DateTime.Today.DayOfWeek == DayOfWeek.Friday)
             {
                 foreach (Employee employee in Employees)
                 {

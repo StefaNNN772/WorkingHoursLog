@@ -114,6 +114,8 @@ namespace EmployeeTimeTrackignApp.ViewModels
                 SelectedProject = ProjectsCB[0];
             }
             int sum = _workHoursService.AddedHoursSum(Employee.EmployeeID);
+            int sumByWeek = _workHoursService.WorkHoursByWeek(Employee.EmployeeID);
+            WHSumWeek = Convert.ToString(sumByWeek);
             WHSum = Convert.ToString(sum);
             WHMissingSum = Convert.ToString((8 * GetWorkingDaysInCurrentMonth()) - sum);
             this.WorkingHoursTracking = (ObservableCollection<WorkHours>)_workHoursService.FindAllByEmployeeID(Employee.EmployeeID);
@@ -162,6 +164,8 @@ namespace EmployeeTimeTrackignApp.ViewModels
 
             MessageBox.Show($"Deleted {sum} rows.");
             int sumMonth = _workHoursService.AddedHoursSum(Employee.EmployeeID);
+            int sumByWeek = _workHoursService.WorkHoursByWeek(Employee.EmployeeID);
+            WHSumWeek = Convert.ToString(sumByWeek);
             WHSum = Convert.ToString(sumMonth);
             WHMissingSum = Convert.ToString((8 * GetWorkingDaysInCurrentMonth()) - sumMonth);
             this.WorkingHoursTracking = (ObservableCollection<WorkHours>)_workHoursService.FindAllByEmployeeID(Employee.EmployeeID);
@@ -225,6 +229,8 @@ namespace EmployeeTimeTrackignApp.ViewModels
                     SelectedProject = ProjectsCB[0];
 
                     int sumMonth = _workHoursService.AddedHoursSum(Employee.EmployeeID);
+                    int sumByWeek = _workHoursService.WorkHoursByWeek(Employee.EmployeeID);
+                    WHSumWeek = Convert.ToString(sumByWeek);
                     WHSum = Convert.ToString(sumMonth);
                     WHMissingSum = Convert.ToString((8 * GetWorkingDaysInCurrentMonth()) - sumMonth);
                     this.WorkingHoursTracking = (ObservableCollection<WorkHours>)_workHoursService.FindAllByEmployeeID(Employee.EmployeeID);

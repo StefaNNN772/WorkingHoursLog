@@ -25,5 +25,7 @@ namespace EmployeeTimeTrackignApp.DAO
         int WorkHoursCheck(int employeeID);
 
         int WorkHoursByWeekCheck(int employeeID);
+
+        int WorkHoursByWeek(int employeeID);
     }
 }

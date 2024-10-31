@@ -268,7 +268,40 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             {
                 SqlCommand command = new SqlCommand("SELECT SUM(AddedHours) FROM WorkHours " +
                     "WHERE EmployeeID = @EmployeeID " +
-                    "AND (Status = 'Accepted' OR STATUS = 'Pending') " +
+                    "AND Status = 'Accepted' " +
+                    "AND CreatedAt >= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2, CAST(GETDATE() AS DATE)) " +
+                    "AND CreatedAt <= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 6, CAST(GETDATE() AS DATE)) ", conn);
+
+                command.Parameters.AddWithValue("@EmployeeID", employeeID);
+
+                int hours = 0;
+
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    if (reader.IsDBNull(0))
+                    {
+                        hours = 0;
+                    }
+                    else
+                    {
+                        hours = reader.GetInt32(0);
+                    }
+                }
+
+                conn.Close();
+
+                return hours;
+            }
+        }
+
+        public int WorkHoursByWeek(int employeeID)
+        {
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand command = new SqlCommand("SELECT SUM(AddedHours) FROM WorkHours " +
+                    "WHERE EmployeeID = @EmployeeID " +
+                    "AND Status = 'Accepted' " +
                     "AND CreatedAt >= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2, CAST(GETDATE() AS DATE)) " +
                     "AND CreatedAt <= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 6, CAST(GETDATE() AS DATE)) ", conn);
 
