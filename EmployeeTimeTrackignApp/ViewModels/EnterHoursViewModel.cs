@@ -37,17 +37,6 @@ namespace EmployeeTimeTrackignApp.ViewModels
         private readonly ProjectsService _projectsService = new ProjectsService();
         private readonly WorkHoursService _workHoursService = new WorkHoursService();
 
-        //private bool _selectedCheck;
-        //public bool SelectedCheck
-        //{
-        //    get { return _selectedCheck; }
-        //    set
-        //    {
-        //        SetProperty(ref _selectedCheck, value);
-        //        DeleteWorkingHoursCommand.RaiseCanExecuteChanged();
-        //    }
-        //}
-
         private object _selectedProject;
         public object SelectedProject
         {

@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\App.xaml
 8351281393
 
-431078661843
+44389950698
 2021252377572
 MainWindow.xaml;Views\EmployeesAdminView.xaml;Views\EmployeeView.xaml;Views\EnterHoursView.xaml;Views\HoursManagementView.xaml;Views\ProfileView.xaml;Views\ProjectsAdminView.xaml;Views\ProjectsManagerView.xaml;
 
-False
+True
 

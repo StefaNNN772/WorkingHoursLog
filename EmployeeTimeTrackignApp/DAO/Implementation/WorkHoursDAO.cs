@@ -88,15 +88,16 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             throw new NotImplementedException();
         }
 
-        public IEnumerable<WorkHours> FindAllByManagerID(int managerID)
+        public IEnumerable<WorkHours> FindAllByManagerID(int managerID, DateTime dateRange)
         {
             ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
                 SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
                     "FROM WorkHours " +
-                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID)", conn);
+                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID AND CreatedAt >= @DateRange)", conn);
                 command.Parameters.AddWithValue("@OwnerID", managerID);
+                command.Parameters.AddWithValue("@DateRange", dateRange);
 
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
@@ -187,6 +188,48 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                 conn.Close();
             }
             return projectsWH;
+        }
+
+        public bool AcceptOrRejectWorkHours(int workHoursID, string status, string comment)
+        {
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    SqlCommand command = new SqlCommand("UPDATE WorkHours SET Status = @Status, Comment = @Comment WHERE WorkHoursID = @WorkHoursID", conn);
+
+                    command.Parameters.AddWithValue("@Status", status);
+                    command.Parameters.AddWithValue("@Comment", comment);
+                    command.Parameters.AddWithValue("@WorkHoursID", workHoursID);
+
+                    command.Transaction = transaction;
+
+                    int rowAffected = command.ExecuteNonQuery();
+
+                    if (rowAffected > 0)
+                    {
+                        transaction.Commit();
+                        return true;
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show($"Error: {ex.Message}");
+                    return false;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
         }
     }
 }
