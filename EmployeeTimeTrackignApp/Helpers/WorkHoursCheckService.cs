@@ -19,7 +19,7 @@ namespace EmployeeTimeTrackignApp.Helpers
 
         public void Start()
         {
-            _timer = new Timer(WorkHoursCheck, null, TimeSpan.FromSeconds(10), TimeSpan.FromDays(1));
+            _timer = new Timer(WorkHoursCheck, null, TimeSpan.FromSeconds(20), TimeSpan.FromDays(1));
         }
 
         private void WorkHoursCheck(object state)
@@ -34,7 +34,7 @@ namespace EmployeeTimeTrackignApp.Helpers
 
             int daysLeft = (endOfMonth - todayDate).Days;
 
-            if (daysLeft <= 2)
+            if (daysLeft == 2)
             {
                 Employees = (ObservableCollection<Employee>)_employeeService.FindAll();
                 
