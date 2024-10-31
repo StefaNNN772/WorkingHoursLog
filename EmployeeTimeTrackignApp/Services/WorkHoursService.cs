@@ -53,5 +53,10 @@ namespace EmployeeTimeTrackignApp.Services
         {
             return workHoursDAO.WorkHoursCheck(employeeID);
         }
+
+        public int WorkHoursByWeekCheck(int employeeID)
+        {
+            return workHoursDAO.WorkHoursByWeekCheck(employeeID);
+        }
     }
 }

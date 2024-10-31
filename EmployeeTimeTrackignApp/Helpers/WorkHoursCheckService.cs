@@ -34,13 +34,11 @@ namespace EmployeeTimeTrackignApp.Helpers
 
             int daysLeft = (endOfMonth - todayDate).Days;
 
-            if (daysLeft == 2)
-            {
-                Employees = (ObservableCollection<Employee>)_employeeService.FindAll();
-                
-                
-                List<Task> emailTasks = new List<Task>();
+            Employees = (ObservableCollection<Employee>)_employeeService.FindAll();
+            List<Task> emailTasks = new List<Task>();
 
+            if (daysLeft == 2)
+            {              
                 foreach (Employee employee in Employees)
                 {
                     int workingHours = _workHoursService.WorkHoursCheck(employee.EmployeeID);
@@ -53,9 +51,26 @@ namespace EmployeeTimeTrackignApp.Helpers
                         }));
                     }
                 }
-
-                await Task.WhenAll(emailTasks);
             }
+
+            if (DateTime.Today.DayOfWeek == DayOfWeek.Thursday)
+            {
+                foreach (Employee employee in Employees)
+                {
+                    int workingHours = _workHoursService.WorkHoursByWeekCheck(employee.EmployeeID);
+
+                    if (workingHours < 40)
+                    {
+                        emailTasks.Add(Task.Run(() =>
+                        {
+                            _emailService.SendEmail(employee.Email, "Working hours this week", $"Hello {employee.Username}. Please enter working hours before the end of the week."
+                                + Environment.NewLine + $"Currently you have {workingHours} hours.");
+                        }));
+                    }
+                }
+            }
+
+            await Task.WhenAll(emailTasks);
         }
 
         public int GetWorkingDaysInCurrentMonth()

@@ -23,5 +23,7 @@ namespace EmployeeTimeTrackignApp.DAO
         bool AcceptOrRejectWorkHours(int workHoursID, string status, string comment);
 
         int WorkHoursCheck(int employeeID);
+
+        int WorkHoursByWeekCheck(int employeeID);
     }
 }
