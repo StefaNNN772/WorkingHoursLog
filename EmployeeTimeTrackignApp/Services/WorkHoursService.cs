@@ -48,5 +48,10 @@ namespace EmployeeTimeTrackignApp.Services
         {
             return workHoursDAO.AcceptOrRejectWorkHours(workHoursID, status, comment);
         }
+
+        public int WorkHoursCheck(int employeeID)
+        {
+            return workHoursDAO.WorkHoursCheck(employeeID);
+        }
     }
 }

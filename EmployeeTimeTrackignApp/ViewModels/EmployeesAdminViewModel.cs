@@ -147,17 +147,19 @@ namespace EmployeeTimeTrackignApp.ViewModels
             bool result = _employeeService.CreateNewPassword(SelectedEmployee.EmployeeID, passwordBox.Password);
             if (result)
             {
-                bool emailSent = _emailService.SendEmail(SelectedEmployee.Email, "Password updated", $"Your username is: " +
-                    $"{SelectedEmployee.Username} and your password is: {passwordBox.Password} . Please update your password in next 48h.");
                 MessageBox.Show("Employee password udapted.");
-                if (emailSent)
+
+                string emailSelected = SelectedEmployee.Email;
+                string usernameSelected = SelectedEmployee.Username;
+                string passwordNew = passwordBox.Password;
+                Thread emailThread = new Thread(() =>
                 {
-                    MessageBox.Show("Email is sent to the adderess of new employee.");
-                }
-                else
-                {
-                    MessageBox.Show("Email isnt sent to the address of new employee.");
-                }
+                    _emailService.SendEmail(emailSelected, "Password updated", $"Your username is: " +
+                    $"{usernameSelected} and your password is: {passwordNew} . Please update your password in next 48h.");
+                });
+
+                emailThread.IsBackground = true;
+                emailThread.Start();
                 Username = "";
                 SelectedRole = EmployeesRole[0];
                 RemainingLeaveDays = "";
@@ -288,9 +290,10 @@ namespace EmployeeTimeTrackignApp.ViewModels
             {
                 MessageBox.Show("New employee added.");
 
+                string emailToSend = Email;
                 Thread emailThread = new Thread(() =>
                 {
-                    _emailService.SendEmail(Email, "Account created", $"Your username is: {username} and your password is: {password} . Please update your password in next 48h.");
+                    _emailService.SendEmail(emailToSend, "Account created", $"Your username is: {username} and your password is: {password} . Please update your password in next 48h.");
                 });
                 emailThread.IsBackground = true;
                 emailThread.Start();

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace EmployeeTimeTrackignApp.ViewModels
 {
@@ -79,9 +80,25 @@ namespace EmployeeTimeTrackignApp.ViewModels
                     {
                         Title = projectWH.Status,
                         Values = new ChartValues<double> { projectWH.WorkingHours },
-                        DataLabels = true
+                        DataLabels = true,
+                        Fill = GetColorByStatus(projectWH.Status)
                     });
                 }
+            }
+        }
+
+        public Brush GetColorByStatus(string status)
+        {
+            switch (status)
+            {
+                case "Accepted":
+                    return Brushes.DeepSkyBlue;
+                case "Pending":
+                    return Brushes.Yellow;
+                case "Rejected":
+                    return Brushes.Red;
+                default:
+                    return Brushes.Gray;
             }
         }
 

@@ -22,7 +22,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                 SqlCommand command = new SqlCommand("SELECT Sum(AddedHours) " +
                     "FROM WorkHours WHERE CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) " +
                     "AND CreatedAt <= GETDATE() " +
-                    "AND Status = 'Accepted' " +
+                    "AND (Status = 'Accepted' OR Status = 'Pending') " +
                     "AND EmployeeID = @EmployeeID", conn);
                 command.Parameters.AddWithValue("@EmployeeID", employeeId);
 
@@ -122,7 +122,8 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("SELECT * FROM WorkHours " +
+                SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
+                    "FROM WorkHours " +
                     "WHERE EmployeeID = @EmployeeID", conn);
                 command.Parameters.AddWithValue("@EmployeeID", employeeID);
 
@@ -229,6 +230,35 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                 {
                     conn.Close();
                 }
+            }
+        }
+
+        public int WorkHoursCheck(int employeeID)
+        {
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand command = new SqlCommand("SELECT SUM(AddedHours) FROM WorkHours " +
+                    "WHERE EmployeeID = @EmployeeID", conn);
+                command.Parameters.AddWithValue("@EmployeeID", employeeID);
+
+                int hours = 0;
+
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    if (reader.IsDBNull(0))
+                    {
+                        hours = 0;
+                    }
+                    else
+                    {
+                        hours = reader.GetInt32(0);
+                    }
+                }
+
+                conn.Close();
+
+                return hours;
             }
         }
     }

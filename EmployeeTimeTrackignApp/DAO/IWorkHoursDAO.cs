@@ -21,5 +21,7 @@ namespace EmployeeTimeTrackignApp.DAO
         IEnumerable<WorkHours> FindAllByManagerID(int managerID, DateTime dateRange);
 
         bool AcceptOrRejectWorkHours(int workHoursID, string status, string comment);
+
+        int WorkHoursCheck(int employeeID);
     }
 }

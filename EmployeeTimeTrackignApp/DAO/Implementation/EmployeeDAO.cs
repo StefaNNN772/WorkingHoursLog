@@ -177,7 +177,46 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
 
         public IEnumerable<Employee> FindAll()
         {
-            throw new NotImplementedException();
+            ObservableCollection<Employee> ret = new ObservableCollection<Employee>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand command = new SqlCommand("SELECT EmployeeID, Username, Email, Role, IsActive, RemainingLeaveDays, PasswordUpdated " +
+                    "FROM Employees", conn);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string role = reader.GetString(3);
+                    EmployeeRole roleNew;
+                    if (role == "Employee")
+                    {
+                        roleNew = EmployeeRole.Employee;
+                    }
+                    else if (role == "Admin")
+                    {
+                        roleNew = EmployeeRole.Admin;
+                    }
+                    else
+                    {
+                        roleNew = EmployeeRole.Manager;
+                    }
+                    ret.Add(new Employee
+                    {
+                        EmployeeID = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Email = reader.GetString(2),
+                        Role = roleNew,
+                        IsActive = reader.GetBoolean(4),
+                        RemainingLeaveDays = reader.GetInt32(5),
+                        PasswordUpdated = reader.GetBoolean(6)
+                    });
+                }
+
+                conn.Close();
+            }
+
+            return ret;
         }
 
         public IEnumerable<Employee> FindAllEmployees(int adminId)
