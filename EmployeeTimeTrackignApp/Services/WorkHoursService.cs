@@ -26,7 +26,7 @@ namespace EmployeeTimeTrackignApp.Services
 
         public IEnumerable<WorkHours> FindAllByEmployeeID(int employeeID)
         {
-            return workHoursDAO.FintAllByEmployeeID(employeeID);
+            return workHoursDAO.FindAllByEmployeeID(employeeID);
         }
 
         public bool DeleteById(int whId)
@@ -37,6 +37,11 @@ namespace EmployeeTimeTrackignApp.Services
         public IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID)
         {
             return workHoursDAO.WorkingHoursByProject(employeeID, projectID);
+        }
+
+        public IEnumerable<WorkHours> FindAllByManagerID(int managerID)
+        {
+            return workHoursDAO.FindAllByManagerID(managerID);
         }
     }
 }

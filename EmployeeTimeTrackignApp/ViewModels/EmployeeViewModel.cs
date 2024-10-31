@@ -123,10 +123,10 @@ namespace EmployeeTimeTrackignApp.ViewModels
             {
                 SelectedContent = new ProjectsManagerView(Employee);
             }
-            //else if (viewName == "HoursManagement" && SelectedContent.GetType() != typeof(HoursManagementView))
-            //{
-            //    SelectedContent = new HoursManagementView();
-            //}
+            else if (viewName == "HoursManagement" && SelectedContent.GetType() != typeof(HoursManagementView))
+            {
+                SelectedContent = new HoursManagementView(Employee);
+            }
             //else if (viewName == "Statistics" && SelectedContent.GetType() != typeof(StatisticsView))
             //{
             //    SelectedContent = new StatisticsView();
@@ -137,9 +137,14 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
             else if (viewName == "LogOut")
             {
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-                CloseWindowAction?.Invoke();
+                MessageBoxResult result = MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    CloseWindowAction?.Invoke();
+                }
             }
         }
     }

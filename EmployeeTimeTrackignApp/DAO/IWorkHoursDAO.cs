@@ -11,11 +11,13 @@ namespace EmployeeTimeTrackignApp.DAO
     public interface IWorkHoursDAO : ICRUDDao<WorkHours, int>
     {
         bool SaveNew(int employeeID, int projectID, int addedHours, string comment);
-        public IEnumerable<WorkHours> FintAllByEmployeeID(int employeeID);
-        public int AddedHoursSum(int employeeId);
+        IEnumerable<WorkHours> FindAllByEmployeeID(int employeeID);
+        int AddedHoursSum(int employeeId);
 
-        public bool DeleteById(int whId);
+        bool DeleteById(int whId);
 
         IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID);
+
+        IEnumerable<WorkHours> FindAllByManagerID(int managerID);
     }
 }

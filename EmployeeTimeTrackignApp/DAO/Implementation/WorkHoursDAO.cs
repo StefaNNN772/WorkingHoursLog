@@ -88,12 +88,35 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             throw new NotImplementedException();
         }
 
+        public IEnumerable<WorkHours> FindAllByManagerID(int managerID)
+        {
+            ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
+                    "FROM WorkHours " +
+                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID)", conn);
+                command.Parameters.AddWithValue("@OwnerID", managerID);
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    ret.Add(new WorkHours(reader.GetInt32(0), reader.GetInt32(1), reader.GetInt32(2), reader.GetInt32(3),
+                        reader.GetDateTime(4), reader.GetString(5), reader.GetString(6)));
+                }
+
+                conn.Close();
+            }
+
+            return ret;
+        }
+
         public WorkHours FindById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<WorkHours> FintAllByEmployeeID(int employeeID)
+        public IEnumerable<WorkHours> FindAllByEmployeeID(int employeeID)
         {
             ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())

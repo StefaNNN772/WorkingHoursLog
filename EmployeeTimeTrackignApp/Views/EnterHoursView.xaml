@@ -160,6 +160,9 @@
                     Margin="90,10,90,10"
                     Name="WHCommentTextBox"
                     TextWrapping="Wrap"
+                    Height="60"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
                     Text="{Binding WorkingHoursComment ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="Enter your comment" Grid.ColumnSpan="4">
                     <i:Interaction.Triggers>

@@ -42,3 +42,5 @@ C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\Empl
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\ProjectsManagerView.baml
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\bin\Debug\net8.0-windows\LiveCharts.dll
 C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\bin\Debug\net8.0-windows\LiveCharts.Wpf.dll
+C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\HoursManagementView.g.cs
+C:\Users\sef_s\Desktop\Schneider Electric - Project\EmployeeTimeTrackignApp\EmployeeTimeTrackignApp\obj\Debug\net8.0-windows\Views\HoursManagementView.baml

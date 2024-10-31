@@ -260,6 +260,11 @@ namespace EmployeeTimeTrackignApp.ViewModels
                 ret = false;
             }
 
+            else if (Regex.IsMatch(WorkingHoursComment, @".{256,}"))
+            {
+                ret = false;
+            }
+
             return ret;
         }
     }
