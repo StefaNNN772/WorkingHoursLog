@@ -127,10 +127,10 @@ namespace EmployeeTimeTrackignApp.ViewModels
             {
                 SelectedContent = new HoursManagementView(Employee);
             }
-            //else if (viewName == "Statistics" && SelectedContent.GetType() != typeof(StatisticsView))
-            //{
-            //    SelectedContent = new StatisticsView();
-            //}
+            else if (viewName == "Statistics" && SelectedContent.GetType() != typeof(StatisticsView))
+            {
+                SelectedContent = new StatisticsView(Employee);
+            }
             else if (viewName == "Profile" && SelectedContent.GetType() != typeof(ProfileView))
             {
                 SelectedContent = new ProfileView(Employee);

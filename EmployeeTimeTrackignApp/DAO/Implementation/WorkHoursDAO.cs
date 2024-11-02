@@ -303,7 +303,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                     "WHERE EmployeeID = @EmployeeID " +
                     "AND Status = 'Accepted' " +
                     "AND CreatedAt >= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 2, CAST(GETDATE() AS DATE)) " +
-                    "AND CreatedAt <= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 6, CAST(GETDATE() AS DATE)) ", conn);
+                    "AND CreatedAt <= DATEADD(DAY, -DATEPART(WEEKDAY, GETDATE()) + 7, CAST(GETDATE() AS DATE)) ", conn);
 
                 command.Parameters.AddWithValue("@EmployeeID", employeeID);
 

@@ -34,6 +34,11 @@ namespace EmployeeTimeTrackignApp.Services
             return projectsDAO.FindAllForManager(managerID);
         }
 
+        public IEnumerable<Projects> FindAllForStatistics(int employeeID)
+        {
+            return projectsDAO.FindAllForStatistics(employeeID);
+        }
+
         public bool DeleteById(int projectID)
         {
             return projectsDAO.DeleteById(projectID);

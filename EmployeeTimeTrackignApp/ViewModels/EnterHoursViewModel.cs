@@ -203,7 +203,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
             if (textBox.Name.Equals("WHCommentTextBox"))
             {
-                if (Regex.IsMatch(textBox.Text, @"^[a-zA-Z]{0,254}$"))
+                if (Regex.IsMatch(textBox.Text, @"^[a-zA-Z0-9\s]{0,254}$"))
                 {
                     return;
                 }

@@ -175,6 +175,42 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             return projects;
         }
 
+        public IEnumerable<Projects> FindAllForStatistics(int employeeID)
+        {
+            ObservableCollection<Projects> projects = new ObservableCollection<Projects>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SELECT p.ProjectID, p.Name FROM Projects p JOIN WorkHours wh ON p.ProjectID = wh.ProjectID " +
+                        "WHERE wh.EmployeeID = @EmployeeID AND wh.CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND wh.CreatedAt < GETDATE() " +
+                        "GROUP BY p.ProjectID, p.Name", conn);
+                    cmd.Parameters.AddWithValue("@EmployeeID", employeeID);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        projects.Add(new Projects
+                        {
+                            ProjectID = reader.GetInt32(0),
+                            Name = reader.GetString(1)
+                        });
+                    }
+
+                    return projects;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    return projects;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+        }
+
         public Projects FindById(int id)
         {
             throw new NotImplementedException();
