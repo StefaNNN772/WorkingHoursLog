@@ -34,6 +34,6 @@ create table WorkHours (
 	Status nvarchar(255) check (Status IN ('Pending', 'Accepted', 'Rejected')) default 'Pending',
 	Comment nvarchar(255),
 	foreign key (EmployeeID) references Employees(EmployeeID),
-	foreign key (ProjectID) references Projects(ProjectID)
+	foreign key (ProjectID) references Projects(ProjectID) ON DELETE CASCADE
 );
 GO

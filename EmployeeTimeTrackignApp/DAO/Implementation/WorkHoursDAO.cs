@@ -95,7 +95,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             {
                 SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
                     "FROM WorkHours " +
-                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID AND CreatedAt >= @DateRange)", conn);
+                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID) AND CreatedAt >= @DateRange", conn);
                 command.Parameters.AddWithValue("@OwnerID", managerID);
                 command.Parameters.AddWithValue("@DateRange", dateRange);
 
@@ -171,7 +171,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             {
                 SqlCommand cmd = new SqlCommand("SELECT Status, SUM(AddedHours) as TotalHours " +
                     "FROM WorkHours " +
-                    "WHERE ProjectID = @ProjectID AND CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND CreatedAt < GETDATE() " +
+                    "WHERE ProjectID = @ProjectID AND (CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND CreatedAt < GETDATE()) " +
                     "GROUP BY Status", conn);
 
                 cmd.Parameters.AddWithValue("@ProjectID", projectID);
