@@ -174,6 +174,7 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ProjectID", projectID);
+                cmd.Parameters.AddWithValue("@EmployeeID", employeeID);
 
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -325,6 +326,31 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
 
                 return hours;
             }
+        }
+
+        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProjectForManager(int projectID)
+        {
+            ObservableCollection<ProjectsWorkingHours> projectsWH = new ObservableCollection<ProjectsWorkingHours>();
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("WorkingHoursByProjectForManager", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@ProjectID", projectID);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    projectsWH.Add(new ProjectsWorkingHours
+                    {
+                        Status = reader.GetString(0),
+                        WorkingHours = reader.GetInt32(1)
+                    });
+                }
+
+                conn.Close();
+            }
+            return projectsWH;
         }
     }
 }

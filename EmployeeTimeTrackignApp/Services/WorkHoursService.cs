@@ -39,6 +39,11 @@ namespace EmployeeTimeTrackignApp.Services
             return workHoursDAO.WorkingHoursByProject(employeeID, projectID);
         }
 
+        public IEnumerable<ProjectsWorkingHours> WorkingHoursByProjectForManager(int projectID)
+        {
+            return workHoursDAO.WorkingHoursByProjectForManager(projectID);
+        }
+
         public IEnumerable<WorkHours> FindAllByManagerID(int managerID, DateTime dateRange)
         {
             return workHoursDAO.FindAllByManagerID(managerID, dateRange);

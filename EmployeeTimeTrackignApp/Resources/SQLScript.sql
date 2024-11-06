@@ -119,6 +119,22 @@ GO
 
 --Procedure for getting working hours for statistics
 CREATE PROCEDURE WorkingHoursByProject
+    @ProjectID INT,
+    @EmployeeID INT
+AS
+BEGIN
+    SELECT Status, SUM(AddedHours) AS TotalHours
+    FROM WorkHours
+    WHERE ProjectID = @ProjectID
+      AND EmployeeID = @EmployeeID
+      AND CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0)
+      AND CreatedAt < GETDATE()
+    GROUP BY Status;
+END;
+GO
+
+--Procedure for getting working hours for statistics in manager view
+CREATE PROCEDURE WorkingHoursByProjectForManager
     @ProjectID INT
 AS
 BEGIN

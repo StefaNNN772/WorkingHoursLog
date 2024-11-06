@@ -70,7 +70,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
         {
             if (SelectedProject != null)
             {
-                this.ProjectsWH = (ObservableCollection<ProjectsWorkingHours>)_workingHoursService.WorkingHoursByProject(Employee.EmployeeID, SelectedProject.ProjectID);
+                this.ProjectsWH = (ObservableCollection<ProjectsWorkingHours>)_workingHoursService.WorkingHoursByProjectForManager(SelectedProject.ProjectID);
 
                 ProjectHoursSeries.Clear();
 

@@ -18,6 +18,8 @@ namespace EmployeeTimeTrackignApp.DAO
 
         IEnumerable<ProjectsWorkingHours> WorkingHoursByProject(int employeeID, int projectID);
 
+        IEnumerable<ProjectsWorkingHours> WorkingHoursByProjectForManager(int projectID);
+
         IEnumerable<WorkHours> FindAllByManagerID(int managerID, DateTime dateRange);
 
         bool AcceptOrRejectWorkHours(int workHoursID, string status, string comment);
