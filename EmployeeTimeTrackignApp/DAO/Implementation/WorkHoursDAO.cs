@@ -150,11 +150,27 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
         {
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("INSERT INTO WorkHours (EmployeeID, ProjectID, AddedHours, Comment) " +
-                    "VALUES (@EmployeeID, @ProjectID, @AddedHours, @Comment)", conn);
+                int daysOrHours = projectID switch
+                {
+                    10000 => addedHours * 8,
+                    _ => addedHours
+                };
+                string query = projectID switch
+                {
+                    10000 => "INSERT INTO WorkHours (EmployeeID, ProjectID, AddedHours, Comment, Status) " +
+                            "VALUES (@EmployeeID, @ProjectID, @AddedHours, @Comment, 'Accepted'); " +
+                            "UPDATE Employees SET RemainingLeaveDays = (RemainingLeaveDays - @AddedDays) WHERE EmployeeID = @EmployeeID;",
+                    _ => "INSERT INTO WorkHours (EmployeeID, ProjectID, AddedHours, Comment) " +
+                         "VALUES (@EmployeeID, @ProjectID, @AddedHours, @Comment)"
+                };
+                SqlCommand command = new SqlCommand(query, conn);
                 command.Parameters.AddWithValue("@EmployeeID", employeeID);
                 command.Parameters.AddWithValue("@ProjectID", projectID);
-                command.Parameters.AddWithValue("@AddedHours", addedHours);
+                command.Parameters.AddWithValue("@AddedHours", daysOrHours);
+                if (projectID == 10000)
+                {
+                    command.Parameters.AddWithValue("@AddedDays", addedHours);
+                }
                 command.Parameters.AddWithValue("@Comment", comment);
 
                 int rowAffected = command.ExecuteNonQuery();

@@ -72,7 +72,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
         public MyICommand<object> UpdateAccountCommand { get; set; }
         public ProfileViewModel(Employee employee)
         {
-            Employee = employee;
+            Employee = _employeeService.FindByUsername(employee.Username, employee.Password);
             if (Employee.IsActive == true)
             {
                 AccountStatus = "Active";

@@ -17,15 +17,6 @@ namespace EmployeeTimeTrackignApp.Models
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        //public Projects(int projectId, int ownerId, string name, bool isActive, DateTime createdAt)
-        //{
-        //    this.ProjectID = projectId;
-        //    this.OwnerID = ownerId;
-        //    this.Name = name;
-        //    this.IsActive = isActive;
-        //    this.CreatedAt = createdAt;
-        //}
-
         public string Name
         {
             get

@@ -77,7 +77,8 @@ CREATE PROCEDURE FindAllProjectsForAdmin
 AS
 BEGIN
 	SELECT ProjectID, OwnerID, Name, IsActive, CreatedAt
-	FROM Projects;
+	FROM Projects
+	WHERE ProjectID != 10000;
 END;
 GO
 
@@ -87,7 +88,7 @@ AS
 BEGIN
 	SELECT EmployeeID, Username, Email, IsActive, RemainingLeaveDays, PasswordUpdated
 	FROM Employees
-	WHERE Role = 'Manager' AND IsActive = 1;
+	WHERE Role = 'Manager' AND IsActive = 1 AND EmployeeID != 1;
 END;
 GO
 
@@ -98,7 +99,7 @@ AS
 BEGIN
 	SELECT EmployeeID, Username, Email, Role, IsActive, RemainingLeaveDays, PasswordUpdated
 	FROM Employees
-	WHERE EmployeeID != @AdminID;
+	WHERE EmployeeID != @AdminID AND EmployeeID != 1;
 END;
 GO
 

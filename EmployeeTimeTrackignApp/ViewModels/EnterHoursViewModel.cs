@@ -36,6 +36,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
         private Employee Employee { get;  }
         private readonly ProjectsService _projectsService = new ProjectsService();
         private readonly WorkHoursService _workHoursService = new WorkHoursService();
+        private readonly EmployeeService _employeeService = new EmployeeService();
 
         private object _selectedProject;
         public object SelectedProject
@@ -45,6 +46,18 @@ namespace EmployeeTimeTrackignApp.ViewModels
             {
                 _selectedProject = value;
                 OnPropertyChanged(nameof(SelectedProject));
+                if (SelectedProject == ProjectsCB[0])
+                {
+                    AddingHoursOrDaysContent = "Enter free days:";
+                    WorkingHoursComment = "Days off";
+                    IsCommentReadOnly = true;
+                }
+                else
+                {
+                    AddingHoursOrDaysContent = "Enter working hours:";
+                    WorkingHoursComment = "";
+                    IsCommentReadOnly = false;
+                }
             }
         }
 
@@ -101,13 +114,39 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
         }
 
+        private string _addingHoursOrDaysContent;
+        public string AddingHoursOrDaysContent
+        {
+            get { return _addingHoursOrDaysContent; }
+            set
+            {
+                SetProperty(ref _addingHoursOrDaysContent, value);
+            }
+        }
+
+        private bool _isCommentReadOnly;
+        public bool IsCommentReadOnly
+        {
+            get { return _isCommentReadOnly; }
+            set
+            {
+                SetProperty(ref _isCommentReadOnly, value);
+            }
+        }
+
         public MyICommand AddWorkingHoursCommand { get; set; }
         public MyICommand DeleteWorkingHoursCommand { get; set; }
         public MyICommand<TextBox> TextChangedCommand { get; set; }
 
         public EnterHoursViewModel(Employee employee)
         {
-            Employee = employee;
+            Employee = Employee = _employeeService.FindByUsername(employee.Username, employee.Password);
+
+            //Premjesteno iznad zbog WorkingHoursComment-a, jer ne moze da poziva RaiseCanExecuteChanged() prije nego se instancira komanda
+            AddWorkingHoursCommand = new MyICommand(OnAddWorkingHours, CanAddWokingHours);
+            TextChangedCommand = new MyICommand<TextBox>(OnTextChanged);
+            DeleteWorkingHoursCommand = new MyICommand(OnDeleteWorkingHours);
+
             this.ProjectsCB = (ObservableCollection<Projects>)_projectsService.FindAll();
             if (ProjectsCB.Count != 0)
             {
@@ -120,12 +159,12 @@ namespace EmployeeTimeTrackignApp.ViewModels
             WHMissingSum = Convert.ToString((8 * GetWorkingDaysInCurrentMonth()) - sum);
             this.WorkingHoursTracking = (ObservableCollection<WorkHours>)_workHoursService.FindAllByEmployeeID(Employee.EmployeeID);
 
-            AddWorkingHoursCommand = new MyICommand(OnAddWorkingHours, CanAddWokingHours);
-            TextChangedCommand = new MyICommand<TextBox>(OnTextChanged);
-            DeleteWorkingHoursCommand = new MyICommand(OnDeleteWorkingHours);
+            //AddWorkingHoursCommand = new MyICommand(OnAddWorkingHours, CanAddWokingHours);
+            //TextChangedCommand = new MyICommand<TextBox>(OnTextChanged);
+            //DeleteWorkingHoursCommand = new MyICommand(OnDeleteWorkingHours);
 
             WorkingHours = "";
-            WorkingHoursComment = "";
+            //WorkingHoursComment = "";
         }
 
         public int GetWorkingDaysInCurrentMonth()
@@ -155,14 +194,18 @@ namespace EmployeeTimeTrackignApp.ViewModels
 
             foreach (var row in selectedRows)
             {
-                bool result = _workHoursService.DeleteById(row.WorkHoursID);
-                if (result)
+                bool result;
+                if (row.ProjectID != 10000)
                 {
-                    sum++;
+                    result = _workHoursService.DeleteById(row.WorkHoursID);
+                    if (result)
+                    {
+                        sum++;
+                    }
                 }
             }
 
-            MessageBox.Show($"Deleted {sum} rows.");
+            MessageBox.Show($"Deleted {sum} rows.\nSome hours may not have been deleted because they are leave hours.");
             int sumMonth = _workHoursService.AddedHoursSum(Employee.EmployeeID);
             int sumByWeek = _workHoursService.WorkHoursByWeek(Employee.EmployeeID);
             WHSumWeek = Convert.ToString(sumByWeek);
@@ -203,7 +246,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
             }
             if (textBox.Name.Equals("WHCommentTextBox"))
             {
-                if (Regex.IsMatch(textBox.Text, @"^[a-zA-Z0-9\s]{0,254}$"))
+                if (Regex.IsMatch(textBox.Text, @"^[a-zA-Z0-9\s/-]{0,254}$"))
                 {
                     return;
                 }
@@ -220,10 +263,29 @@ namespace EmployeeTimeTrackignApp.ViewModels
             Projects project = (Projects)SelectedProject;
             try
             {
-                bool result = _workHoursService.SaveNew(Employee.EmployeeID, project.ProjectID, int.Parse(WorkingHours), WorkingHoursComment);
+                bool result = false;
+                if (project.Name.Equals("Free days"))
+                {
+                    if ((Employee.RemainingLeaveDays - int.Parse(WorkingHours)) >= 0)
+                    {
+                        result = _workHoursService.SaveNew(Employee.EmployeeID, project.ProjectID, int.Parse(WorkingHours), WorkingHoursComment);
+                    }
+                }
+                else
+                {
+                    result = _workHoursService.SaveNew(Employee.EmployeeID, project.ProjectID, int.Parse(WorkingHours), WorkingHoursComment);
+                }
+                
                 if (result)
                 {
-                    MessageBox.Show("Working hours added.");
+                    if (project.Name.Equals("Free days"))
+                    {
+                        MessageBox.Show("Free days added.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Working hours added.");
+                    }
                     WorkingHours = "";
                     WorkingHoursComment = "";
                     SelectedProject = ProjectsCB[0];
@@ -237,7 +299,15 @@ namespace EmployeeTimeTrackignApp.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Failed while trying to add working hours.");
+                    if (project.Name.Equals("Free days") && (Employee.RemainingLeaveDays - int.Parse(WorkingHours)) < 0)
+                    {
+                        MessageBox.Show($"Failed while trying to add free days.\nYou dont have enough free days left. " +
+                            $"You have {Employee.RemainingLeaveDays} remaining free days.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed while trying to add working hours.");
+                    }
                 }
             }
             catch (Exception ex)

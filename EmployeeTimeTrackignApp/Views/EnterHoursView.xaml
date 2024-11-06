@@ -145,7 +145,7 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Label 
-                    Content="Enter working hours:" 
+                    Content="{Binding AddingHoursOrDaysContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                     FontSize="16"
                     Grid.Column="1"
                     FontWeight="Bold"
@@ -197,6 +197,7 @@
                     Height="60"
                     VerticalScrollBarVisibility="Auto"
                     HorizontalScrollBarVisibility="Disabled"
+                    IsReadOnly="{Binding IsCommentReadOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Text="{Binding WorkingHoursComment ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="Enter your comment">
                     <i:Interaction.Triggers>
