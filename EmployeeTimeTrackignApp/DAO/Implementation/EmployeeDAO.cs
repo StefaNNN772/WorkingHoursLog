@@ -4,6 +4,7 @@ using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -224,8 +225,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<Employee> ret = new ObservableCollection<Employee>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("SELECT EmployeeID, Username, Email, Role, IsActive, RemainingLeaveDays, PasswordUpdated " +
-                    "FROM Employees WHERE EmployeeID != @AdminID", conn);
+                SqlCommand command = new SqlCommand("FindAllEmployees", conn);
+                command.CommandType = CommandType.StoredProcedure;
+
                 command.Parameters.AddWithValue("@AdminID", adminId);
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -262,8 +264,8 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<Employee> ret = new ObservableCollection<Employee>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("SELECT EmployeeID, Username, Email, IsActive, RemainingLeaveDays, PasswordUpdated " +
-                    "FROM Employees WHERE Role = 'Manager' AND IsActive = 1", conn);
+                SqlCommand command = new SqlCommand("FindAllManagersForAdmin", conn);
+                command.CommandType = CommandType.StoredProcedure;
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -297,26 +299,22 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             Employee employee = null;
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Employees WHERE Username = @Username AND Password = @Password", conn);
+                SqlCommand cmd = new SqlCommand("GetEmployeeByCredentials", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.AddWithValue("@Username", username);
                 cmd.Parameters.AddWithValue("@Password", password);
+
                 SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                if (reader.Read())
                 {
                     string role = reader.GetString(5);
-                    EmployeeRole roleNew;
-                    if (role == "Employee")
+                    EmployeeRole roleNew = role switch
                     {
-                        roleNew = EmployeeRole.Employee;
-                    }
-                    else if (role == "Admin")
-                    {
-                        roleNew = EmployeeRole.Admin;
-                    }
-                    else
-                    {
-                        roleNew = EmployeeRole.Manager;
-                    }
+                        "Employee" => EmployeeRole.Employee,
+                        "Admin" => EmployeeRole.Admin,
+                        _ => EmployeeRole.Manager
+                    };
                     employee = new Employee
                     {
                         EmployeeID = reader.GetInt32(0),

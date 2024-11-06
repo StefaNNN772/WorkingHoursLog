@@ -4,6 +4,7 @@ using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -106,7 +107,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<Projects> projects = new ObservableCollection<Projects>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Projects WHERE IsActive = 1", conn);
+                SqlCommand cmd = new SqlCommand("FindAllActiveProjects", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -130,7 +133,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<Projects> projects = new ObservableCollection<Projects>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SELECT ProjectID, OwnerID, Name, IsActive, CreatedAt FROM Projects", conn);
+                SqlCommand cmd = new SqlCommand("FindAllProjectsForAdmin", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -154,7 +159,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<Projects> projects = new ObservableCollection<Projects>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SELECT ProjectID, OwnerID, Name, IsActive, CreatedAt FROM Projects WHERE OwnerID = @OwnerID", conn);
+                SqlCommand cmd = new SqlCommand("FindAllProjectsForManager", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
                 cmd.Parameters.AddWithValue("@OwnerID", managerID);
 
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -182,9 +189,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("SELECT p.ProjectID, p.Name FROM Projects p JOIN WorkHours wh ON p.ProjectID = wh.ProjectID " +
-                        "WHERE wh.EmployeeID = @EmployeeID AND wh.CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND wh.CreatedAt < GETDATE() " +
-                        "GROUP BY p.ProjectID, p.Name", conn);
+                    SqlCommand cmd = new SqlCommand("FindAllProjectsForStatistics", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
                     cmd.Parameters.AddWithValue("@EmployeeID", employeeID);
 
                     SqlDataReader reader = cmd.ExecuteReader();

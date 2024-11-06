@@ -4,6 +4,7 @@ using EmployeeTimeTrackignApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -93,9 +94,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
-                    "FROM WorkHours " +
-                    "WHERE ProjectID IN (SELECT ProjectID FROM Projects WHERE OwnerID = @OwnerID) AND CreatedAt >= @DateRange", conn);
+                SqlCommand command = new SqlCommand("GetWorkHoursByManagerAndDateRange", conn);
+                command.CommandType = CommandType.StoredProcedure;
+
                 command.Parameters.AddWithValue("@OwnerID", managerID);
                 command.Parameters.AddWithValue("@DateRange", dateRange);
 
@@ -122,9 +123,9 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<WorkHours> ret = new ObservableCollection<WorkHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand command = new SqlCommand("SELECT WorkHoursID, EmployeeID, ProjectID, AddedHours, CreatedAt, Status, Comment " +
-                    "FROM WorkHours " +
-                    "WHERE EmployeeID = @EmployeeID", conn);
+                SqlCommand command = new SqlCommand("FindAllByEmployeeID", conn);
+                command.CommandType = CommandType.StoredProcedure;
+
                 command.Parameters.AddWithValue("@EmployeeID", employeeID);
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -169,10 +170,8 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             ObservableCollection<ProjectsWorkingHours> projectsWH = new ObservableCollection<ProjectsWorkingHours>();
             using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
             {
-                SqlCommand cmd = new SqlCommand("SELECT Status, SUM(AddedHours) as TotalHours " +
-                    "FROM WorkHours " +
-                    "WHERE ProjectID = @ProjectID AND (CreatedAt >= DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) AND CreatedAt < GETDATE()) " +
-                    "GROUP BY Status", conn);
+                SqlCommand cmd = new SqlCommand("WorkingHoursByProject", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@ProjectID", projectID);
 
