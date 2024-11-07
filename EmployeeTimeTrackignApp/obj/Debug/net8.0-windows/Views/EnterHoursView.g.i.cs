@@ -91,7 +91,7 @@ namespace EmployeeTimeTrackignApp.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/EmployeeTimeTrackignApp;component/views/enterhoursview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EmployeeTimeTrackignApp;V1.0.0.0;component/views/enterhoursview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\EnterHoursView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

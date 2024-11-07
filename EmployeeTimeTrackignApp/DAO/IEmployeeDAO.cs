@@ -13,6 +13,8 @@ namespace EmployeeTimeTrackignApp.DAO
 
         Employee FindByUsername(string username, string password);
 
+        Employee FindByUserID(int employeeID);
+
         bool ExistsByUsername(string username);
 
         bool AddNewEmployee(string username, string password, string email, string role, int remainingLeaveDays);

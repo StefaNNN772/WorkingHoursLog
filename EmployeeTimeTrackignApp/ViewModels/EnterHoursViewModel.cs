@@ -140,7 +140,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
 
         public EnterHoursViewModel(Employee employee)
         {
-            Employee = Employee = _employeeService.FindByUsername(employee.Username, employee.Password);
+            Employee = _employeeService.FindByUserID(employee.EmployeeID);
 
             //Premjesteno iznad zbog WorkingHoursComment-a, jer ne moze da poziva RaiseCanExecuteChanged() prije nego se instancira komanda
             AddWorkingHoursCommand = new MyICommand(OnAddWorkingHours, CanAddWokingHours);
@@ -152,6 +152,7 @@ namespace EmployeeTimeTrackignApp.ViewModels
             {
                 SelectedProject = ProjectsCB[0];
             }
+            //Provjeriti
             int sum = _workHoursService.AddedHoursSum(Employee.EmployeeID);
             int sumByWeek = _workHoursService.WorkHoursByWeek(Employee.EmployeeID);
             WHSumWeek = Convert.ToString(sumByWeek);

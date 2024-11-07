@@ -294,6 +294,46 @@ namespace EmployeeTimeTrackignApp.DAO.Implementation
             throw new NotImplementedException();
         }
 
+        public Employee FindByUserID(int employeeID)
+        {
+            Employee employee = null;
+            using (SqlConnection conn = ConnectionUtil_Pooling.GetConnection())
+            {
+                SqlCommand cmd = new SqlCommand("GetEmployeeByUserID", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@EmployeeID", employeeID);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    string role = reader.GetString(5);
+                    EmployeeRole roleNew = role switch
+                    {
+                        "Employee" => EmployeeRole.Employee,
+                        "Admin" => EmployeeRole.Admin,
+                        _ => EmployeeRole.Manager
+                    };
+                    employee = new Employee
+                    {
+                        EmployeeID = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        PasswordCreatedAt = reader.GetDateTime(3),
+                        Email = reader.GetString(4),
+                        Role = roleNew,
+                        IsActive = reader.GetBoolean(6),
+                        CreatedAt = reader.GetDateTime(7),
+                        RemainingLeaveDays = reader.GetInt32(8),
+                        PasswordUpdated = reader.GetBoolean(9)
+                    };
+                }
+
+                conn.Close();
+            }
+            return employee;
+        }
+
         public Employee FindByUsername(string username, string password)
         {
             Employee employee = null;

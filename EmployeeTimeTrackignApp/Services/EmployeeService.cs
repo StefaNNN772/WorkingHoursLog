@@ -23,6 +23,11 @@ namespace EmployeeTimeTrackignApp.Services
             return employeeDAO.FindByUsername(username, password);
         }
 
+        public Employee FindByUserID(int employeeID)
+        {
+            return employeeDAO.FindByUserID(employeeID);
+        }
+
         public bool ExistsByUsername(string username)
         {
             return employeeDAO.ExistsByUsername(username);
